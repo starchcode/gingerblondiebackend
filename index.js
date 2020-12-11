@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 
 const limiter1 = rateLimit({
-  windowMs: 1000, // 15 seconds
+  windowMs: 1000, // 1 seconds
   max: 1, // limit each IP to 1 requests per windowMs
 });
 const limiter2 = rateLimit({
@@ -39,13 +39,14 @@ app.use('/contact', limiter1, contact);
 const newsletter = require('./newsletter');
 app.use('/newsletter', newsletter);
 
+const food = require('./food');
+app.use('/food', limiter1, food);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   console.log('here is your ERROR: ' + err.message)
   res.status(status).send(err.message);
 })
-
 
 // cron.schedule('0,10,20,30,40,50 * * * * *', function() {
 //   console.log('---------------------');
