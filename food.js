@@ -23,9 +23,14 @@ food.get('/',async (req, res, next)=>{
         headers: headers
       })
       .then(response => response.json())
+      // .catch(e => res.sendStatus(404))
 
       Promise.all([dataResponse, getImages]).then(values => {
        res.send({results: values[0], images: values[1]})
+      })
+      .catch(e =>{
+        // console.log(e)
+         res.sendStatus(503)
       })
   })
 
