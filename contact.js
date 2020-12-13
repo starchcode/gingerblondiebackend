@@ -57,6 +57,7 @@ return fetch(VERIFY_URL, { method: 'POST' })
         })
 
     }else if(response.score > 0.6 && req.body.emailNewsletter){
+      console.log(response.score)
       console.log('newsletter request received!')
       // res.redirect('/newsletter')
       res.redirect(307, '/newsletter');
