@@ -1,19 +1,18 @@
 const food = require('express').Router();
-const { response } = require('express');
+// const { response } = require('express');
 const fetch = require('node-fetch');
 
 food.get('/',async (req, res, next)=>{
     const URL = 'http://localhost:8888/wp-json/wp/v2/products?status=private';
     const URL_MEDIA = 'http://localhost:8888/wp-json/wp/v2/'
-    const myBody = {
-      "title": "test",
-      "content": "this is a test from postman",
-      "status": "publish"
-  }  
+  //   const myBody = {
+  //     "title": "test",
+  //     "content": "this is a test from postman",
+  //     "status": "publish"
+  // }  
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.WP}`
-      
     }
     const dataResponse =  fetch(URL, {
         headers: headers
