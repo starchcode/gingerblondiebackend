@@ -1,9 +1,17 @@
-const food = require('express').Router();
+const wp = require('express').Router();
 // const { response } = require('express');
 const fetch = require('node-fetch');
 
-food.get('/',async (req, res, next)=>{
-    const URL = 'http://localhost:8888/wp-json/wp/v2/products?status=private';
+wp.get('/',async (req, res, next)=>{
+  console.log(req.query.q)
+  if(!req.query.q) res.status(400).send('Bad Request!')
+  const URL_APPEND =  
+  req.query.q == 'food'? 'products?status=private' 
+  : req.query.q == 'recipe'? 'posts?categories=39' 
+  : req.query.q == 'blog'? 'posts?categories=40'
+  : null;
+  
+    const URL = 'http://localhost:8888/wp-json/wp/v2/' + URL_APPEND;
     const URL_MEDIA = 'http://localhost:8888/wp-json/wp/v2/'
   //   const myBody = {
   //     "title": "test",
@@ -33,4 +41,4 @@ food.get('/',async (req, res, next)=>{
       })
   })
 
-  module.exports = food;
+  module.exports = wp;

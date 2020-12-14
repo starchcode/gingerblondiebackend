@@ -39,8 +39,8 @@ app.use('/contact', limiter1, contact);
 const newsletter = require('./newsletter');
 app.use('/newsletter', newsletter);
 
-const food = require('./food');
-app.use('/food', limiter1, food);
+const wp = require('./wp');
+app.use('/wp', limiter1, wp);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 contact.post('/', async (req, res)=>{
 
-
     const bodyHTML=`
     <b>Hello admin,</b> <br> <br>
     
@@ -23,7 +22,6 @@ contact.post('/', async (req, res)=>{
     Phone: ${req.body.phone}<br>
     Enquiry: <br>" <em>${req.body.enquiry}</em>"
 `
-
 var VERIFY_URL = `https://www.google.com/recaptcha/api/siteverify?secret=${SECRET_KEY}&response=${req.body['g-recaptcha-response']}`;
 return fetch(VERIFY_URL, { method: 'POST' })
   .then(response => response.json())
@@ -44,8 +42,7 @@ return fetch(VERIFY_URL, { method: 'POST' })
           from: "<starchcode@gmail.com>", // sender address
           to: "mrdave67@gmail.com", // list of receivers
           subject: `${req.body.fullName} has sent you a message!`, // Subject line
-          html: bodyHTML// plain text body
-          // html: "<b>Hello world?</b>", // html body
+          html: bodyHTML
         },  function (err, data) {
           if (err) {
             console.log("error: email did not send", err);
@@ -58,11 +55,12 @@ return fetch(VERIFY_URL, { method: 'POST' })
 
     }else if(response.score > 0.6 && req.body.emailNewsletter){
       console.log(response.score)
+      
       console.log('newsletter request received!')
       // res.redirect('/newsletter')
       res.redirect(307, '/newsletter');
-    }
-          
+    }else { console.log(response)}
+        //  res.send('not authorized!') 
   })
   
 

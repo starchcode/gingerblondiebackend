@@ -42,9 +42,6 @@ async function subscriber(emailRequest, name) {
 
 async function archiveUser(listId, Hash, emailRequest) {
   const response = await mailchimp.lists.deleteListMember(listId, Hash);
-  //   console.log(response);
-  // await subscriber(emailRequest)
-  //   console.log(`This user is now ${response.status}.`);
 }
 
 const update = async (listId, Hash, status) => {
@@ -61,7 +58,7 @@ const update = async (listId, Hash, status) => {
 
 newsletter.post("/", async (req, res) => {
     const matchName = req.body.nameNewsletter.split(' ')[0];
-    console.log(matchName)
+
     const name = req.body.nameNewsletter;
   const emailRequest = req.body.emailNewsletter;
   const subscriberHash = md5(emailRequest.toLowerCase());
@@ -74,7 +71,7 @@ newsletter.post("/", async (req, res) => {
     );
 
     console.log(`This user's subscription status is ${response.status}.`);
-    //   console.log(response);
+
 
     if (response.status === "subscribed") { //DONE
       // await archiveUser(listId, subscriberHash);
