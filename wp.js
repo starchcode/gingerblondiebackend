@@ -5,34 +5,33 @@ const fetch = require('node-fetch');
 wp.get('/',async (req, res, next)=>{
   console.log(req.query.q)
   if(!req.query.q) res.status(400).send('Bad Request!')
+
+  const perPage = '&per_page=10'
   const URL_APPEND =  
   req.query.q == 'food'? 'products?status=private' 
-  : req.query.q == 'recipe'? 'posts?categories=39' 
-  : req.query.q == 'blog'? 'posts?categories=40'
+  : req.query.q == 'recipes'? 'posts?categories=39' 
+  : req.query.q == 'blog'? 'posts?categories=40' // num 1 for uncategorized posts
   : null;
-  
-    const URL = 'http://localhost:8888/wp-json/wp/v2/' + URL_APPEND;
-    const URL_MEDIA = 'http://localhost:8888/wp-json/wp/v2/'
-  //   const myBody = {
-  //     "title": "test",
-  //     "content": "this is a test from postman",
-  //     "status": "publish"
-  // }  
-    const headers = {
+
+  const URL = 'http://localhost:8888/wp-json/wp/v2/' + URL_APPEND + perPage;
+  const URL_MEDIA = 'http://localhost:8888/wp-json/wp/v2/'
+ 
+  const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.WP}`
     }
-    const dataResponse =  fetch(URL, {
+  const dataResponse =  fetch(URL, {
         headers: headers
       }).then(response => response.json())
 
-      const getImages =  fetch(`${URL_MEDIA}media`, {
+  const getImages =  fetch(`${URL_MEDIA}media`, {
         headers: headers
       })
       .then(response => response.json())
       // .catch(e => res.sendStatus(404))
 
       Promise.all([dataResponse, getImages]).then(values => {
+        console.log(values[0])
        res.send({results: values[0], images: values[1]})
       })
       .catch(e =>{
