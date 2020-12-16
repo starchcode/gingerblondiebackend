@@ -3,7 +3,6 @@ const wp = require('express').Router();
 const fetch = require('node-fetch');
 
 wp.get('/',async (req, res, next)=>{
-  console.log(req.query.q)
   if(!req.query.q) res.status(400).send('Bad Request!')
 
   const perPage = '&per_page=10'
@@ -31,7 +30,7 @@ wp.get('/',async (req, res, next)=>{
       // .catch(e => res.sendStatus(404))
 
       Promise.all([dataResponse, getImages]).then(values => {
-        console.log(values[0])
+
        res.send({results: values[0], images: values[1]})
       })
       .catch(e =>{
