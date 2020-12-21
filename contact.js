@@ -4,13 +4,16 @@ const bodyParser = require("body-parser");
 const fetch = require('node-fetch');
 var SECRET_KEY = process.env.CAPTCHA_SECRET_KEY
 
+//import emails
+const {EMAIL_FROM, EMAIL_TO} = require('./urls');
+
 // parse application/json
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-contact.post('/', async (req, res)=>{
+contact.post('/', async (req, res, next)=>{
 
     const bodyHTML=`
     <b>Hello admin,</b> <br> <br>
@@ -39,33 +42,31 @@ return fetch(VERIFY_URL, { method: 'POST' })
 
         let info = transporter.sendMail(
         {
-          from: "<starchcode@gmail.com>", // sender address
-          to: "mrdave67@gmail.com", // list of receivers
-          subject: `${req.body.fullName} has sent you a message!`, // Subject line
+          from: EMAIL_FROM, // sender address
+          to: EMAIL_TO, // list of receivers
+          subject: `${req.body.fullName} has sent you a message! - GingerBlondie.ie`, // Subject line
           html: bodyHTML
         },  function (err, data) {
           if (err) {
-            console.log("error: email did not send", err);
-            res.status(404).send('Your message was not sent! try again later332.');
+            // console.log("error: email did not send", err);
+            next(err)
+            // res.status(404).send('Your message was not sent! try again later.');
           } else {
               console.log('email sent!')
-            res.send({result: 'Thank you! Your message was sent.'});
+              res.send({ result: "Message sent!", 
+              type: 'contact' });
           }
         })
 
     }else if(response.score > 0.6 && req.body.emailNewsletter){
-      console.log(response.score)
-      
       console.log('newsletter request received!')
-      // res.redirect('/newsletter')
+      console.log(response.score)
       res.redirect(307, '/newsletter');
-    }else { console.log(response)}
-        //  res.send('not authorized!') 
+    }else { console.log(response)
+    
+         res.send('not authorized!') 
+    }
   })
-  
-
-
-
 })
 
 module.exports = contact;

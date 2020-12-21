@@ -8,7 +8,6 @@ const cron = require("node-cron");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 
-const WP_URL = "http://localhost:8888/";
 
 require("dotenv").config();
 app = express();
@@ -16,18 +15,24 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 
 const limiter1 = rateLimit({
-  windowMs: 1000, // 1 seconds
+  windowMs: 2 * 1000, // 1 seconds
   max: 1, // limit each IP to 1 requests per windowMs
 });
 const limiter2 = rateLimit({
   windowMs: 15000, // 15 seconds
   max: 1, // limit each IP to 1 requests per windowMs
 });
+const limiter3 = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 2, // limit each IP to 1 requests per windowMs
+  message: 'You have reached the maximum number of requests! Comeback later.'
+});
+
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.send("Hi");
+  res.send("Hello There!");
 });
 
 const send = require("./send");
@@ -37,7 +42,7 @@ app.use("/send", limiter2, send);
 const igdata = require("./igdata");
 app.use("/igdata", limiter1, igdata);
 const contact = require("./contact");
-app.use("/contact", limiter1, contact);
+app.use("/contact", contact);
 const newsletter = require("./newsletter");
 app.use("/newsletter", newsletter);
 
@@ -46,7 +51,19 @@ app.use("/wp", limiter1, wp);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
-  console.log("here is your ERROR: " + err.message);
+
+const DATA = `-------------------
+'we recieved an error @ ${new Date().toUTCString()} ${status}
+here is your error:
+${err}
+-------------------
+`
+console.log(DATA)
+  fs.appendFile('error.txt', DATA, function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+  });
+
   res.status(status).send(err.message);
 });
 

@@ -116,7 +116,7 @@ newsletter.post("/", async (req, res) => {
           type:'subscription'
       });
     }else{
-        res.send('')
+        res.send('ERROR')
     }
   }
 });

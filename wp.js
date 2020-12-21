@@ -1,10 +1,12 @@
 const wp = require('express').Router();
 // const { response } = require('express');
 const fetch = require('node-fetch');
+const { WP_API_URL } = require('./urls.js');
+
 
 wp.get('/',async (req, res, next)=>{
   if(!req.query.q) res.status(400).send('Bad Request!')
-
+// console.log('URL is: ' + WP_API_URL)
   const perPage = '&per_page=10'
   const URL_APPEND =  
   req.query.q == 'food'? 'products?status=private' 
@@ -12,8 +14,8 @@ wp.get('/',async (req, res, next)=>{
   : req.query.q == 'blog'? 'posts?categories=40' // num 1 for uncategorized posts
   : null;
 
-  const URL = 'http://localhost:8888/wp-json/wp/v2/' + URL_APPEND + perPage;
-  const URL_MEDIA = 'http://localhost:8888/wp-json/wp/v2/'
+  const URL = WP_API_URL + URL_APPEND + perPage;
+  const URL_MEDIA = WP_API_URL
  
   const headers = {
         'Content-Type': 'application/json',
