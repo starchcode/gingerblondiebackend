@@ -20,3 +20,18 @@ Error: NO CORS!
 here is your error:
 Error: Not allowed by CORS
 -------------------
+-------------------
+'we recieved an error @ Tue, 22 Dec 2020 10:27:23 GMT 500
+here is your error:
+ReferenceError: options is not defined
+-------------------
+-------------------
+'we recieved an error @ Tue, 22 Dec 2020 10:28:21 GMT 500
+here is your error:
+ReferenceError: options is not defined
+-------------------
+-------------------
+'we recieved an error @ Tue, 22 Dec 2020 10:39:23 GMT 500
+here is your error:
+TypeError: res.status(...).statusText is not a function
+-------------------

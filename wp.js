@@ -25,15 +25,24 @@ wp.get('/',async (req, res, next)=>{
         headers: headers
       }).then(response => response.json())
 
-  const getImages =  fetch(`${URL_MEDIA}media`, {
-        headers: headers
-      })
-      .then(response => response.json())
-      // .catch(e => res.sendStatus(404))
-
-      Promise.all([dataResponse, getImages]).then(values => {
-
-       res.send({results: values[0], images: values[1]})
+      let getImages
+      const promiseValues = [dataResponse]
+  if(req.query.q === 'food') {
+      console.log('Images are going to fetch')
+        getImages = fetch(`${URL_MEDIA}media`, {
+         headers: headers
+       })
+       .then(response => response.json())
+        promiseValues.push(getImages)
+     }
+     await Promise.all(promiseValues).then(values => {
+       if (promiseValues.length > 1) {
+       console.log('sending: ' + req.query.q)
+         console.log('sending images this one time only!')
+        return res.send({results: values[0], images: values[1]})
+       }
+       console.log('sending: ' + req.query.q)
+       res.send({results: values[0]})
       })
       .catch(e =>{
         // console.log(e)

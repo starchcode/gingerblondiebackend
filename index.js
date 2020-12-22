@@ -14,7 +14,7 @@ app = express();
 const PORT = process.env.PORT || 4000;
 
 // Enabling cors for certain URL 
-var whitelist = ['http://localhost:3000', 'http://example2.com']
+var whitelist = ['http://localhost:3000', 'http://192.168.0.31:3000']
 var corsOptions = {
   origin: function (origin, callback) {
     try{
@@ -34,8 +34,8 @@ var corsOptions = {
 app.use(cors(corsOptions))
 
 const limiter1 = rateLimit({
-  windowMs: 2 * 1000, // 1 seconds
-  max: 1, // limit each IP to 1 requests per windowMs
+  windowMs: 3 * 1000, // 1 seconds
+  max: 4, // limit each IP to 1 requests per windowMs
 });
 const limiter2 = rateLimit({
   windowMs: 15000, // 15 seconds
@@ -43,8 +43,7 @@ const limiter2 = rateLimit({
 });
 const limiter3 = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 3, // limit each IP to 1 requests per windowMs
-  message: 'You have reached the maximum number of requests! Comeback later.'
+  max: 6, // limit each IP to 1 requests per windowMs
 });
 
 app.use(bodyParser.json());
