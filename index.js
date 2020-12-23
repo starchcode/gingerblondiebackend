@@ -14,10 +14,11 @@ app = express();
 const PORT = process.env.PORT || 4000;
 
 // Enabling cors for certain URL 
-var whitelist = ['http://localhost:3000', 'http://192.168.0.31:3000']
+var whitelist = ['http://localhost:3000', 'http://192.168.0.31:3000', 'https://thegingerblondie.ie', 'https://www.thegingerblondie.ie']
 var corsOptions = {
   origin: function (origin, callback) {
     try{
+      // console.log(origin)
       if (whitelist.indexOf(origin) !== -1) {
         console.log('CORS allowed!')
         callback(null, true)
