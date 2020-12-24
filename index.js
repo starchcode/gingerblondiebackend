@@ -75,7 +75,10 @@ const {tester, jwtRenewer, igTokenRenew} = require('./automation')
 // cron.schedule("*/3 * * * * *", tester)
 
 // token renewal for wordpress
-cron.schedule("0 0 * * *", jwtRenewer);
+cron.schedule("30 0 * * *", jwtRenewer);
+// cron.schedule("19 0 * * *", ()=>{
+//   console.log('working?')
+// });
 cron.schedule("0 0 28,5 * *", igTokenRenew);
 
 

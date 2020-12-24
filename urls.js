@@ -1,4 +1,4 @@
-const WP_URL = "http://wp.thegingerblondie.ie/";
+const WP_URL = "https://wp.thegingerblondie.ie/";
 const EMAIL_FROM = "<starchcode@gmail.com>";
 const EMAIL_TO = "starchcode@gmail.com"; //could be a list: Fred@email.com, Brad@email.com in a string format
 const WP_API_URL = WP_URL + 'wp-json/wp/v2/';
