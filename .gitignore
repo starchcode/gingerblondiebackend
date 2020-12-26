@@ -3,7 +3,7 @@
 #ignore
 readme.txt
 rem.env
-
+error.txt
 # dependencies
 /node_modules
 /.pnp
