@@ -2,6 +2,8 @@ const {WP_URL} = require('./urls');
 const fs = require("fs");
 const fetch = require("node-fetch");
 const nodemailer = require("nodemailer");
+const { json } = require('body-parser');
+const JSONTransport = require('nodemailer/lib/json-transport');
 
 
 function tester(){ console.log('ok')}
@@ -45,9 +47,10 @@ async function jwtRenewer() {
           })
           .then((jsonRes) => {
               if(jsonRes.token){
-    
-            console.log("here is your token: " + jsonRes.token);
-      
+                console.log("here is your token: " + jsonRes.token);
+                
+            process.env.WP = jsonRes.token; //change proecess token
+
             let texts = `IG_API_KEY=${process.env.IG_API_KEY} 
           APP_ID=${process.env.APP_ID} 
           APP_SECRET=${process.env.APP_SECRET}
@@ -56,11 +59,11 @@ async function jwtRenewer() {
           CAPTCHA_SECRET_KEY=${process.env.CAPTCHA_SECRET_KEY}
           MAIL_API=${process.env.MAIL_API}
           MAIL_LISTID=${process.env.MAIL_LISTID}
-          WP=${jsonRes.token}
+          WP=${process.env.WP}
           WP_USER=${process.env.WP_USER}
           WP_PASS=${process.env.WP_PASS}`;
       
-            fs.writeFile(".env", texts, function (err) {
+            fs.writeFile(".env", texts, function (err) { //write it in .env in case server restarts
               if (err) throw err;
               console.log('New WP JWT token written in the file!')
             });
@@ -94,7 +97,11 @@ console.log('going to get a new IG token')
       const jsonRes = await ren.json();
     
       if(jsonRes.access_token){
-        let texts= `IG_API_KEY=${jsonRes.access_token} 
+
+        process.env.IG_API_KEY = jsonRes.access_token; // change current key in process
+
+        let texts= 
+        `IG_API_KEY=${process.env.IG_API_KEY} 
         APP_ID=${process.env.APP_ID} 
         APP_SECRET=${process.env.APP_SECRET}
         GMAIL=${process.env.GMAIL}
@@ -106,7 +113,7 @@ console.log('going to get a new IG token')
         WP_USER=${process.env.WP_USER}
         WP_PASS=${process.env.WP_PASS}`
 
-        fs.writeFile('.env', texts, function (err) {
+        fs.writeFile('.env', texts, function (err) { //write it in .env file in case server restarts
             if (err) throw err;
             console.log('new IG token saved in file!')
           });
